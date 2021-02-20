@@ -62,5 +62,38 @@ exports.createTodo = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.deleteTodo = deleteOne(Todo);
-exports.updateTodo = updateOne(Todo);
+exports.deleteTodo = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+  const todo = user.todoList.find(
+    (e) => String(e._id) === String(req.params.id)
+  );
+
+  if (!todo) {
+    return next(new AppError("todo not found", 404));
+  }
+
+  await Todo.findByIdAndDelete(todo._id);
+  user.todoList = user.todoList.filter(
+    (e) => String(e._id) !== String(todo._id)
+  );
+  await user.save();
+
+  return res.status(201).json({});
+});
+
+exports.updateTodo = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+  const todo = user.todoList.find(
+    (e) => String(e._id) === String(req.params.id)
+  );
+
+  if (!todo) {
+    return next(new AppError("todo not found", 404));
+  }
+
+  await Todo.findByIdAndUpdate(todo._id, req.body);
+
+  return res.status(201).json({
+    status: "success",
+  });
+});
