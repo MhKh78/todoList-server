@@ -30,7 +30,9 @@ exports.getTodo = catchAsync(async (req, res, next) => {
     return next(new AppError("user not found", 404));
   }
 
-  const todo = user.todoList.find((e) => String(e) === String(req.params.id));
+  const todo = user.todoList.find(
+    (e) => String(e._id) === String(req.params.id)
+  );
 
   if (!todo) {
     return next(new AppError("todo not found", 404));
