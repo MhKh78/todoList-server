@@ -18,8 +18,6 @@ if (process.env.DB) {
     })
     .then(async () => {
       console.log("DB Connected SuccessFully");
-      const users = await User.find({});
-      console.log(users);
     });
 } else {
   console.log("No DB Connection String");
