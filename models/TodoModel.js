@@ -11,6 +11,11 @@ const TodoSchema = new Schema(
       type: String,
       required: [true, "Todo Must Have A Description"],
     },
+    isChecked: {
+      type: Boolean,
+      required: [true, "Todo Must Have A isChecked State"],
+      default: false,
+    },
   },
   { timestamps: true }
 );
